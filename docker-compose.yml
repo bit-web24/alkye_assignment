@@ -1,0 +1,22 @@
+services:
+  postgres:
+    image: postgres:17
+    container_name: alkye-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: bittu
+      POSTGRES_PASSWORD: bittu
+      POSTGRES_DB: alkye_assignment
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./postgres/init.sql:/docker-entrypoint-initdb.d/001-init.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U bittu -d alkye_assignment"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  postgres_data:
